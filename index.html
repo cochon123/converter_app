@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distance Converter Mock</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <!--
+    Student Name:
+    Date: May 27, 2026
+    Program Description: This page is a rough mockup for the assignment unit converter app. It currently implements only the distance converter page. The user can enter either one distance value or a comma-separated list of distance values. JavaScript processes the selected conversion direction and displays miles-to-kilometres or kilometres-to-miles results.
+  -->
+
+  <nav class="p-4 border-b">
+    <h1 class="text-2xl font-bold">Unit Converter</h1>
+    <div class="mt-4 flex gap-2">
+      <button class="border p-2">Weight</button>
+      <button class="border p-2 bg-gray-200">Distance</button>
+      <button class="border p-2">Temperature</button>
+    </div>
+  </nav>
+
+  <main class="p-4">
+    <h2 class="text-xl font-bold">Distance Converter</h2>
+
+    <form id="distanceForm" class="mt-4">
+      <div class="mb-4">
+        <label for="conversionType" class="block">Conversion Type</label>
+        <select id="conversionType" class="border p-2 w-full">
+          <option value="miles-km">Miles to Kilometres</option>
+          <option value="km-miles">Kilometres to Miles</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="singleValue" class="block">Single Value</label>
+        <input id="singleValue" type="number" step="any" class="border p-2 w-full" placeholder="Example: 10">
+        <button type="button" id="convertSingle" class="border p-2 mt-2">Convert Single Value</button>
+      </div>
+
+      <div class="mb-4">
+        <label for="valueList" class="block">List of Values</label>
+        <input id="valueList" type="text" class="border p-2 w-full" placeholder="Example: 1, 5, 10">
+        <button type="button" id="convertList" class="border p-2 mt-2">Convert List</button>
+      </div>
+
+      <div class="border p-4">
+        <h3 class="font-bold">Result</h3>
+        <p id="result">No conversion yet.</p>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // Creates a conversion function for the requested distance units.
+    const createConverter = (fromUnit, toUnit) => {
+      const conversionRates = {
+        'miles-km': value => value * 1.60934,
+        'km-miles': value => value / 1.60934
+      };
+
+      const conversionKey = `${fromUnit}-${toUnit}`;
+      const convertValue = conversionRates[conversionKey];
+
+      return input => {
+        if (Array.isArray(input)) {
+          return input.map(value => convertValue(value));
+        }
+
+        return convertValue(input);
+      };
+    };
+
+    // Reads the selected conversion direction from the form.
+    const getSelectedConverter = () => {
+      const selectedType = document.getElementById('conversionType').value;
+
+      if (selectedType === 'miles-km') {
+        return {
+          converter: createConverter('miles', 'km'),
+          label: 'km'
+        };
+      }
+
+      return {
+        converter: createConverter('km', 'miles'),
+        label: 'miles'
+      };
+    };
+
+    // Converts one entered distance value.
+    document.getElementById('convertSingle').addEventListener('click', () => {
+      const singleValue = Number(document.getElementById('singleValue').value);
+      const resultElement = document.getElementById('result');
+
+      if (Number.isNaN(singleValue)) {
+        resultElement.textContent = 'Please enter a number.';
+        return;
+      }
+
+      const selectedConverter = getSelectedConverter();
+      const convertedValue = selectedConverter.converter(singleValue);
+      resultElement.textContent = `${singleValue} converts to ${convertedValue.toFixed(2)} ${selectedConverter.label}`;
+    });
+
+    // Converts a comma-separated list of distance values.
+    document.getElementById('convertList').addEventListener('click', () => {
+      const valueList = document.getElementById('valueList').value
+        .split(',')
+        .map(value => Number(value.trim()))
+        .filter(value => !Number.isNaN(value));
+      const resultElement = document.getElementById('result');
+
+      if (valueList.length === 0) {
+        resultElement.textContent = 'Please enter a comma-separated list of numbers.';
+        return;
+      }
+
+      const selectedConverter = getSelectedConverter();
+      const convertedValues = selectedConverter.converter(valueList);
+      resultElement.textContent = `${convertedValues.map(value => value.toFixed(2)).join(', ')} ${selectedConverter.label}`;
+    });
+  </script>
+</body>
+</html>
