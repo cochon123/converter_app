@@ -1,0 +1,26 @@
+{
+  "name": "web_dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cochon123/converter_app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cochon123/converter_app/issues"
+  },
+  "homepage": "https://github.com/cochon123/converter_app#readme",
+  "devDependencies": {
+    "vite": "^8.0.16"
+  }
+}
