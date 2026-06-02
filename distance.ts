@@ -62,3 +62,55 @@ document.getElementById('convertList')!.addEventListener('click', () => {
   const convertedValues = selectedConverter.converter(valueList) as number[];
   resultElement.textContent = `${convertedValues.map(value => value.toFixed(2)).join(', ')} ${selectedConverter.label}`;
 });
+const createConverter = (fromUnit: string, toUnit: string) => {
+  const conversionRates: Record<string, (value: number) => number> = {
+    'milesToKm': value => value * 1.60934,
+    'kmToMiles': value => value / 1.60934
+  };
+
+  const key = `${fromUnit}To${toUnit.charAt(0).toUpperCase() + toUnit.slice(1)}`;
+  const convertValue = conversionRates[key];
+
+  return (input: number | number[]): number | number[] => {
+    if (Array.isArray(input)) {
+      return input.map(convertValue);
+    }
+    return convertValue(input);
+  };
+};
+
+document.getElementById("convertBtn")!.addEventListener("click", () => {
+  const input = (document.getElementById("inputValue") as HTMLInputElement).value;
+  const type = (document.getElementById("conversionType") as HTMLSelectElement).value;
+  const resultElement = document.getElementById("result")!;
+
+  let values: number | number[];
+
+  // Handle array or single input
+  if (input.includes(",")) {
+    values = input.split(",").map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+  } else {
+    values = parseFloat(input);
+  }
+
+  if (values === "" || (Array.isArray(values) && values.length === 0) || isNaN(values as number)) {
+    resultElement.textContent = "Please enter valid number(s).";
+    return;
+  }
+
+  let converter;
+
+  if (type === "milesToKm") {
+    converter = createConverter("miles", "km");
+  } else {
+    converter = createConverter("km", "miles");
+  }
+
+  const result = converter(values);
+
+  if (Array.isArray(result)) {
+    resultElement.textContent = result.map(v => v.toFixed(2)).join(", ");
+  } else {
+    resultElement.textContent = result.toFixed(2);
+  }
+});
