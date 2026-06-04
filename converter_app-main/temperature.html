@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperature Converter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+  <nav class="p-4 border-b">
+    <h1 class="text-2xl font-bold">Unit Converter</h1>
+    <div class="mt-4 flex gap-2">
+      <a href="weight.html"><button class="border p-2">Weight</button></a>
+      <a href="distance.html"><button class="border p-2">Distance</button></a>
+      <a href="temperature.html"><button class="border p-2 bg-gray-200">Temperature</button></a>
+    </div>
+  </nav>
+
+  <main class="p-4">
+    <h2 class="text-xl font-bold">Temperature Converter</h2>
+
+    <form id="temperatureForm" class="mt-4">
+      <div class="mb-4">
+        <label for="conversionType" class="block">Conversion Type</label>
+        <select id="conversionType" class="border p-2 w-full">
+          <option value="celsius-fahrenheit">Celsius to Fahrenheit</option>
+          <option value="fahrenheit-celsius">Fahrenheit to Celsius</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="singleValue" class="block">Single Value</label>
+        <input id="singleValue" type="number" step="any" class="border p-2 w-full" placeholder="Example: 100">
+        <button type="button" id="convertSingle" class="border p-2 mt-2">Convert Single Value</button>
+      </div>
+
+      <div class="mb-4">
+        <label for="valueList" class="block">List of Values</label>
+        <input id="valueList" type="text" class="border p-2 w-full" placeholder="Example: 0, 100, 37">
+        <button type="button" id="convertList" class="border p-2 mt-2">Convert List</button>
+      </div>
+
+      <div class="border p-4">
+        <h3 class="font-bold">Result</h3>
+        <p id="result">No conversion yet.</p>
+      </div>
+    </form>
+  </main>
+
+  <script src="/temperature.ts" type="module"></script>
+</body>
+</html>
